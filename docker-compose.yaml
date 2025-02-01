@@ -1,0 +1,24 @@
+#Connection url for connection in the DatabaseView:
+#  jdbc:mysql://0.0.0.0:13306/DOCKERDB, login=root, password=root
+#App is available at: http://localhost:<local-port>/entitybus/post
+networks:
+  fleetat-local:
+
+services:
+  fleetat-importmap-mfe:
+#    image: openjdk:21
+    pull_policy: build # when running locally
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - STATIC_FILES_LOCATION_CONTAINER
+    volumes:
+#      - ./target/java-configuration.jar:/jars/java-configuration.jar
+      - ${STATIC_FILES_LOCATION_LOCAL}:${STATIC_FILES_LOCATION_CONTAINER}
+    working_dir: /app
+    command: java -jar fleetat-importmap-mfe.jar
+    networks:
+      - fleetat-local
