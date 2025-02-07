@@ -12,13 +12,15 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "8092:8080"
+      - "5005:5005" # For Debugging
     environment:
       - STATIC_FILES_LOCATION_CONTAINER
     volumes:
 #      - ./target/java-configuration.jar:/jars/java-configuration.jar
       - ${STATIC_FILES_LOCATION_LOCAL}:${STATIC_FILES_LOCATION_CONTAINER}
     working_dir: /app
-    command: java -jar fleetat-importmap-mfe.jar
+#    command: java -jar fleetat-importmap-mfe.jar
+    command: java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -jar fleetat-importmap-mfe.jar
     networks:
       - fleetat-local
