@@ -24,3 +24,8 @@ services:
     command: java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -jar fleetat-importmap-mfe.jar
     networks:
       - fleetat-local
+    healthcheck:
+      test: [ "CMD-SHELL", "curl \"http://localhost:8092/actuator/health\" -i -X GET -H \"Accept: application/json\"" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
